@@ -179,163 +179,164 @@
 ;;;;;;;;;;;;;;;;;
 
 
-  (rc/require 'tree-sitter)
-  (rc/require 'tree-sitter-langs)
-  (rc/require 'all-the-icons)
-  (rc/require 'doom-modeline)
-  (rc/require 'ligature)
-  (rc/require 'rainbow-delimiters)
-  (rc/require 'evil)
-  (rc/require 'evil-easymotion)
-  (rc/require 'evil-mc)
-  (rc/require 'magit)
-  (rc/require 'git-gutter+)
-  (rc/require 'helm)
-  (rc/require 'helm-git-grep)
-  (rc/require 'helm-ls-git)
-  (rc/require 'flycheck-rust)
-  (rc/require 'company)
-  (rc/require 'posframe)
-  (rc/require 'lsp-mode)
-  (rc/require 'lsp-ui)
-  (rc/require 'lsp-haskell)
-  (rc/require 'fancy-dabbrev)
-  (rc/require 'org-modern)
-  (rc/require 'org-super-agenda)
-  (rc/require 'mermaid-mode)
-  (rc/require 'smartparens)
-  (rc/require 'vimish-fold)
-  (rc/require 'evil-vimish-fold)
+(rc/require 'tree-sitter)
+(rc/require 'tree-sitter-langs)
+(rc/require 'all-the-icons)
+(rc/require 'doom-modeline)
+(rc/require 'ligature)
+(rc/require 'rainbow-delimiters)
+(rc/require 'evil)
+(rc/require 'evil-easymotion)
+(rc/require 'evil-mc)
+(rc/require 'magit)
+(rc/require 'git-gutter+)
+(rc/require 'helm)
+(rc/require 'helm-git-grep)
+(rc/require 'helm-ls-git)
+(rc/require 'flycheck-rust)
+(rc/require 'company)
+(rc/require 'posframe)
+(rc/require 'lsp-mode)
+(rc/require 'lsp-ui)
+(rc/require 'lsp-haskell)
+(rc/require 'fancy-dabbrev)
+(rc/require 'org-modern)
+(rc/require 'org-super-agenda)
+(rc/require 'mermaid-mode)
+(rc/require 'smartparens)
+(rc/require 'vimish-fold)
+(rc/require 'evil-vimish-fold)
 										; Treesitter
-  (global-tree-sitter-mode)				
-  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
-  (tree-sitter-require 'rust)
+(global-tree-sitter-mode)				
+(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+(tree-sitter-require 'rust)
 
-  (setq treesit-language-source-alist
-		'((csharp "https://github.com/tree-sitter/tree-sitter-c-sharp")
-		  (elisp "https://github.com/emacs-tree-sitter/elisp-tree-sitter.git")
-		  (rust "https://github.com/tree-sitter/tree-sitter-rust.git")
-		  (lua "https://github.com/tjdevries/tree-sitter-lua.git")
-		  (typescript "https://github.com/tree-sitter/tree-sitter-typescript.git")
-		  (clojure "https://github.com/sogaiu/tree-sitter-clojure.git")
-		  (haskell "https://github.com/tree-sitter/tree-sitter-haskell.git")
-		  (css "https://github.com/tree-sitter/tree-sitter-css.git")
-		  (yaml "https://github.com/ikatyang/tree-sitter-yaml.git")
-		  ))
+(setq treesit-language-source-alist
+	  '((csharp "https://github.com/tree-sitter/tree-sitter-c-sharp")
+		(elisp "https://github.com/emacs-tree-sitter/elisp-tree-sitter.git")
+		(rust "https://github.com/tree-sitter/tree-sitter-rust.git")
+		(lua "https://github.com/tjdevries/tree-sitter-lua.git")
+		(typescript "https://github.com/tree-sitter/tree-sitter-typescript.git")
+		(clojure "https://github.com/sogaiu/tree-sitter-clojure.git")
+		(haskell "https://github.com/tree-sitter/tree-sitter-haskell.git")
+		(css "https://github.com/tree-sitter/tree-sitter-css.git")
+		(yaml "https://github.com/ikatyang/tree-sitter-yaml.git")
+		))
 										; Language modes
-  (rc/require 'rust-mode)				
-  (rc/require 'lua-mode)
-  (rc/require 'typescript-mode)
-  (rc/require 'clojure-mode)
-  (rc/require 'haskell-mode)
+(rc/require 'rust-mode)				
+(rc/require 'lua-mode)
+(rc/require 'typescript-mode)
+(rc/require 'clojure-mode)
+(rc/require 'haskell-mode)
 
 										; Autothemer
-  (use-package autothemer :ensure t :defer t)
+(use-package autothemer :ensure t :defer t)
 										; All the icons
-  (use-package all-the-icons :ensure t :defer t)
+(use-package all-the-icons :ensure t :defer t)
 										; Doom modeline 
-  (use-package doom-modeline
-    :ensure t
-    :init (doom-modeline-mode 1)
-    :custom ((doom-modeline-height 20))) 
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1)
+  :custom ((doom-modeline-height 20))) 
 
 										; Ligatures
-	(use-package ligature :defer t)
-  (ligature-set-ligatures 't '("www"))
-  ;; Enable ligatures in programming modes                                                           
-  (ligature-set-ligatures 'prog-mode '("www" "*>" "*/" "\\\\" "\\\\\\" "{-" "::"
-				       ":::" ":=" "!!" "!=" "!==" "-}" "----" "-->" "->" "->>"
-				       "-<" "-<<" "-~" "#{" "#[" "##" "###" "####" "#(" "#?" "#_"
-				       "#_(" ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*" "/**"
-				       "/=" "/==" "/>" "//" "///" "&&" "||" "||=" "|=" "|>" "^=" "$>"
-				       "++" "+++" "+>" "=:=" "==" "===" "==>" "=>" "=>>" "<="
-				       "=<<" "=/=" ">-" ">=" ">=>" ">>" ">>-" ">>=" ">>>" "<*"
-				       "<*>" "<|" "<|>" "<$" "<$>" "<!--" "<-" "<--" "<->" "<+"
-				       "<+>" "<=" "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<"
-				       "<~" "<~~" "</" "</>" "~@" "~-" "~>" "~~" "~~>" "%%"))
+(use-package ligature :defer t)
+(ligature-set-ligatures 't '("www"))
+;; Enable ligatures in programming modes                                                           
+(ligature-set-ligatures 'prog-mode '("www" "*>" "*/" "\\\\" "\\\\\\" "{-" "::"
+									 ":::" ":=" "!!" "!=" "!==" "-}" "----" "-->" "->" "->>"
+									 "-<" "-<<" "-~" "#{" "#[" "##" "###" "####" "#(" "#?" "#_"
+									 "#_(" ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*" "/**"
+									 "/=" "/==" "/>" "//" "///" "&&" "||" "||=" "|=" "|>" "^=" "$>"
+									 "++" "+++" "+>" "=:=" "==" "===" "==>" "=>" "=>>" "<="
+									 "=<<" "=/=" ">-" ">=" ">=>" ">>" ">>-" ">>=" ">>>" "<*"
+									 "<*>" "<|" "<|>" "<$" "<$>" "<!--" "<-" "<--" "<->" "<+"
+									 "<+>" "<=" "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<"
+									 "<~" "<~~" "</" "</>" "~@" "~-" "~>" "~~" "~~>" "%%"))
 
-  (global-ligature-mode 't)
+(global-ligature-mode 't)
 										; Rainbow delimiters
-	(use-package rainbow-delimiters :defer t
-	  :hook (prog-mode . rainbow-delimiters-mode))
+(use-package rainbow-delimiters :defer t
+  :hook (prog-mode . rainbow-delimiters-mode))
 										; EVIL MODE
-  (use-package evil
-	:init
-	(setq evil-want-integration t)
-	(setq evil-want-keybinding nil)
-	(setq evil-want-C-u-scroll t)
-	(setq evil-want-C-i-jump nil)
-	:config
-	(evil-mode 1)
-	(define-key evil-insert-state-map (kbd "C-k") 'evil-normal-state)
-	(define-key evil-normal-state-map (kbd "C-S-p") 'delete-window)
-	(define-key evil-normal-state-map (kbd "C-,") 'other-window)
-	(define-key evil-normal-state-map (kbd "C--") 'split-window-horizontally)
-	(define-key evil-normal-state-map (kbd "C-.") 'split-window-vertically)
+(use-package evil
+  :init
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)
+  (setq evil-want-C-u-scroll t)
+  (setq evil-want-C-i-jump nil)
+  :config
+  (evil-mode 1)
+  (define-key evil-insert-state-map (kbd "C-k") 'evil-normal-state)
+  (define-key evil-normal-state-map (kbd "C-S-p") 'delete-window)
+  (define-key evil-normal-state-map (kbd "C-,") 'other-window)
+  (define-key evil-normal-state-map (kbd "C--") 'split-window-horizontally)
+  (define-key evil-normal-state-map (kbd "C-.") 'split-window-vertically)
   )
-  (evilem-default-keybindings "SPC")
-  (global-evil-mc-mode 1)
-  (global-set-key (kbd "C-S-c C-S-c") 'evil-mc-make-all-cursors)
-  (global-set-key (kbd "C->") 'evil-mc-make-and-goto-next-match)
-  (global-set-key (kbd "C-<") 'evil-mc-make-and-goto-prev-match)
+(evilem-default-keybindings "SPC")
+(global-evil-mc-mode 1)
+(global-set-key (kbd "C-S-c C-S-c") 'evil-mc-make-all-cursors)
+(global-set-key (kbd "C->") 'evil-mc-make-and-goto-next-match)
+(global-set-key (kbd "C-<") 'evil-mc-make-and-goto-prev-match)
 										; GIT GUTTER
-  (add-hook 'prog-mode-hook 'git-gutter+-mode)
-  (setq git-gutter+-added-sign "|")
-  (setq git-gutter+-modified-sign "|")
+(add-hook 'prog-mode-hook 'git-gutter+-mode)
+(setq git-gutter+-added-sign "|")
+(setq git-gutter+-modified-sign "|")
 
   										; Flycheck
-  (with-eval-after-load 'rust-mode
-	(add-hook 'rust-mode-hook #'flycheck-rust-setup))
+(with-eval-after-load 'rust-mode
+  (add-hook 'rust-mode-hook #'flycheck-rust-setup))
 										; Company
-  (global-company-mode 1)
+(global-company-mode 1)
 										; LSP
-  (set 'lsp-use-plists t)
+(set 'lsp-use-plists t)
 (use-package lsp-mode
   :straight t
   :init (add-to-list 'company-backends 'company-capf)
   :config
   (setq lsp-ui-doc-enable nil)
   :commands lsp)
-  (use-package lsp-ui :defer t)
-  ;;HOOKS
-  (add-hook 'rust-mode-hook #'lsp-deferred)
-  (add-hook 'typescript-mode-hook #'lsp-deferred)
-  (add-hook 'lua-mode-hook #'lsp-deferred)
-  (add-hook 'c-mode-common-hook #'lsp-deferred)
-  ;; CONFIG
-  (global-set-key (kbd "C-<tab>") 'lsp-ui-doc-toggle)
-  (global-set-key (kbd "C-<return>") 'lsp-ui-imenu)
-  (setq lsp-ui-doc-position 'at-point)
-  (setq lsp-ui-doc-show-with-cursor nil)
-  (setq lsp-lens-enable t)
-  (setq lsp-diagnostics-provider :flycheck)
-  (setq lsp-ui-sideline-enable t)
-  (setq lsp-ui-sideline-show-code-actions nil)
-  (setq lsp-signature-render-documentation nil)
-  (setq lsp-signature-function 'lsp-lv-message)
-  (setq lsp-completion-provider :company-mode)
-  (setq lsp-completion-show-detail t)
-  (setq lsp-completion-show-kind t)
-  (add-hook 'haskell-mode-hook #'lsp-deferred)
-  (add-hook 'haskell-literate-mode-hook #'lsp-deferred)
-  (global-fancy-dabbrev-mode t)
-  (global-set-key (kbd "<backtab>") 'fancy-dabbrev-expand)
-	(global-org-modern-mode t)
-	(setq
-	 org-modern-todo-faces nil 
-	 org-modern-todo nil)
-	(setq org-modern-star 'replace)
-  (smartparens-global-mode t)
-  (setq evil-vimish-fold-target-modes '(prog-mode conf-mode text-mode))
-  (global-evil-vimish-fold-mode 1)
-  (use-package vimish-fold
-	:ensure
-	:after evil)
+(use-package lsp-ui :defer t)
+;;HOOKS
+(add-hook 'rust-mode-hook #'lsp-deferred)
+(add-hook 'typescript-mode-hook #'lsp-deferred)
+(add-hook 'lua-mode-hook #'lsp-deferred)
+(add-hook 'c-mode-common-hook #'lsp-deferred)
+(add-hook 'gdscript-mode-hook #'lsp-deferred)
+;; CONFIG
+(global-set-key (kbd "C-<tab>") 'lsp-ui-doc-toggle)
+(global-set-key (kbd "C-<return>") 'lsp-ui-imenu)
+(setq lsp-ui-doc-position 'at-point)
+(setq lsp-ui-doc-show-with-cursor nil)
+(setq lsp-lens-enable t)
+(setq lsp-diagnostics-provider :flycheck)
+(setq lsp-ui-sideline-enable t)
+(setq lsp-ui-sideline-show-code-actions nil)
+(setq lsp-signature-render-documentation nil)
+(setq lsp-signature-function 'lsp-lv-message)
+(setq lsp-completion-provider :company-mode)
+(setq lsp-completion-show-detail t)
+(setq lsp-completion-show-kind t)
+(add-hook 'haskell-mode-hook #'lsp-deferred)
+(add-hook 'haskell-literate-mode-hook #'lsp-deferred)
+(global-fancy-dabbrev-mode t)
+(global-set-key (kbd "<backtab>") 'fancy-dabbrev-expand)
+(global-org-modern-mode t)
+(setq
+ org-modern-todo-faces nil 
+ org-modern-todo nil)
+(setq org-modern-star 'replace)
 
-  (use-package evil-vimish-fold
-	:ensure
-	:after vimish-fold
-	:hook ((prog-mode conf-mode text-mode) . evil-vimish-fold-mode))
+(setq evil-vimish-fold-target-modes '(prog-mode conf-mode text-mode))
+(global-evil-vimish-fold-mode 1)
+(use-package vimish-fold
+  :ensure
+  :after evil)
+
+(use-package evil-vimish-fold
+  :ensure
+  :after vimish-fold
+  :hook ((prog-mode conf-mode text-mode) . evil-vimish-fold-mode))
 
 ;;;;;;;;;;
 ;; ---- ;;
