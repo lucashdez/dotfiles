@@ -1,0 +1,8 @@
+mode=drun
+allow_images=true
+normal_window=false
+prompt=Application
+insensitive=true
+halign=fill
+image_size=48
+hide_scroll=true
