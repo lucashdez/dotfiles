@@ -1,0 +1,211 @@
+;; solarized-seriuusly
+;; styles = {
+;;	 comments = { italic = true },
+;;	 keywords = { italic = true },
+;;	 functions = {},
+;;	 variables = {},
+;; }
+  
+  
+  
+  
+
+
+(deftheme solarized-seriuusly
+  "Solarized-Osaka-Own")
+
+
+(defun hue-rgb (v1 v2 h)
+  (cond
+   ((< h (/ 6.0)) (+ v1 (* (- v2 v1) h 6.0)))
+   ((< h 0.5) v2)
+   ((< h (/ 2.0 3)) (+ v1 (* (- v2 v1) (- (/ 2.0 3) h) 6.0)))
+   (t v1)))
+
+(defun hsl-rgb (H S L)
+  (list L L L)
+  (let* ((m2 (if (<= L 0.5)
+				 (* L (+ 1.0 S))
+			   (- (+ L S) (* L S))))
+		 (m1 (- (* 2.0 L) m2)))
+    (list
+     (hue-rgb m1 m2 (mod (+ H (/ 3.0)) 1))
+     (hue-rgb m1 m2 H)
+     (hue-rgb m1 m2 (mod (- H (/ 3.0)) 1)))))
+
+(defun hsl (H S L)
+  (let* ((ca (hsl-rgb (/ H 360.0) (/ S 100.0) (/ L 100.0))))
+	(concat "#" (format "%02X" (* 255 (nth 0 ca))) (format "%02X" (* 255 (nth 1 ca))) (format "%02X" (* 255(nth 2 ca))))))
+
+
+(let ((bg (hsl 192 100 3))
+	  (bg_float (hsl 192 100 5))
+	  (bg_highlight (hsl 192 100 11))
+	  (fg (hsl 186 8 5))
+	  (base04 (hsl 192 100 5))
+	  (base03 (hsl 192 100 11))
+	  (base02 (hsl 192 81 14))
+	  (base01 (hsl 194 14 40))
+	  (base00 (hsl 196 13 45))
+	  (base0 (hsl 186 8 65))
+	  (base1 (hsl 180 7 70))
+	  (base2 (hsl 46 42 88))
+	  (base3 (hsl 44 87 94))
+	  (base4 (hsl 0 0 100))
+	  (yellow (hsl 45 100 35))
+	  (yellow100 (hsl 47 100 80))
+	  (yellow300 (hsl 45 100 50))
+	  (yellow500 (hsl 45 100 35))
+	  (yellow700 (hsl 45 100 20))
+	  (yellow900 (hsl 46 100 10))
+	  (orange    (hsl 18 80 44))
+	  (orange100 (hsl 17 100 70)) 
+	  (orange300 (hsl 17 94 51))
+	  (orange500 (hsl 18 80 44))
+	  (orange700 (hsl 18 81 35))
+	  (orange900 (hsl 18 80 20))
+	  (red    (hsl 1 71 52))
+	  (red100 (hsl 1 100 80))
+	  (red300 (hsl 1 90 64))
+	  (red500 (hsl 1 71 52))
+	  (red700 (hsl 1 71 42))
+	  (red900 (hsl 1 71 20))
+	  (magenta    (hsl 331 64  52))
+	  (magenta100 (hsl 331 100 73))
+	  (magenta300 (hsl 331 86  64))
+	  (magenta500 (hsl 331 64  52))
+	  (magenta700 (hsl 331 64  42))
+	  (magenta900 (hsl 331 65  20))
+	  (violet    (hsl 237 43  60))
+	  (violet100 (hsl 236 100 90))
+	  (violet300 (hsl 237 69  77))
+	  (violet500 (hsl 237 43  60))
+	  (violet700 (hsl 237 43  50))
+	  (violet900 (hsl 237 42  25))
+	  (blue    (hsl 205 69  49))
+	  (blue100 (hsl 205 100 83))
+	  (blue300 (hsl 205 90  62))
+	  (blue500 (hsl 205 69  49))
+	  (blue700 (hsl 205 70  35))
+	  (blue900 (hsl 205 69  20))
+	  (cyan    (hsl 175 59  40))
+	  (cyan100 (hsl 176 100 86))
+	  (cyan300 (hsl 175 85  55))
+	  (cyan500 (hsl 175 59  40))
+	  (cyan700 (hsl 182 59  25))
+	  (cyan900 (hsl 183 58  15))
+	  (green    (hsl 68 100 30))
+	  (green100 (hsl 90 100 84))
+	  (green300 (hsl 76 100 49))
+	  (green500 (hsl 68 100 30))
+	  (green700 (hsl 68 100 20))
+	  (green900 (hsl 68 100 10))
+	  )
+
+(custom-theme-set-faces
+ 'solarized-seriuusly
+ ; Default things
+ `(default ((t ,(list :foreground base0 ; normal-text 
+					  :background bg)))) ; background
+ `(cursor ((t ,(list :foreground base03
+					 :background base0))))
+ `(hl-line ((t ,(list :background bg_highlight
+					  :foreground nil))))
+ `(border ((t ,(list :foreground yellow700
+					 :background bg_float))))
+ `(fringe ((t (:background ,bg   :foreground ,fg))))
+ `(line-number-current-line ((t ,(list :background bg
+									   :foreground orange500))))
+ `(line-number ((t ,(list :background bg
+						   :foreground yellow700))))
+
+ `(region ((t (:foreground ,base03
+						   :background ,base0))))
+ `(highlight ((t (:foreground nil
+							  :background ,base03))))
+
+ ;; FONT-LOCK
+ `(font-lock-keyword-face ((t (:foreground ,green500
+										   :slant italic))))
+ `(font-lock-type-face ((t (:foreground ,yellow500))))
+ `(font-lock-constant-face ((t (:foreground ,cyan500))))
+ `(font-lock-variable-name-face ((t (:foreground ,blue500))))
+ `(font-lock-builtin-face ((t (:foreground ,yellow500))))
+ `(font-lock-string-face ((t (:foreground ,cyan500))))
+ `(font-lock-comment-face ((t (:foreground ,base01
+										   :slant italic))))
+ `(font-lock-comment-delimiter-face ((t (:foreground ,base01
+													 :slant italic))))
+ `(font-lock-doc-face ((t (:foreground ,base01
+									   :background ,bg_float))))
+ `(font-lock-function-name-face ((t (:foreground ,blue500))))
+ `(font-lock-function-call-face ((t (:foreground ,blue500))))
+ `(font-lock-preprocessor-face ((t (:foreground ,red500))))
+ `(font-lock-warning-face ((t (:foreground ,orange500 :weight bold))))
+
+ ;; RAINBOW DELIMITERS
+ `(rainbow-delimiters-depth-1-face ((t (:foreground ,red))))
+ `(rainbow-delimiters-depth-2-face ((t (:foreground ,yellow))))
+ `(rainbow-delimiters-depth-3-face ((t (:foreground ,orange))))
+ `(rainbow-delimiters-depth-4-face ((t (:foreground ,green))))
+ `(rainbow-delimiters-depth-5-face ((t (:foreground ,blue))))
+ `(rainbow-delimiters-depth-6-face ((t (:foreground ,violet))))
+ `(rainbow-delimiters-depth-7-face ((t (:foreground ,cyan))))
+ `(rainbow-delimiters-depth-8-face ((t (:foreground ,red))))
+ `(rainbow-delimiters-depth-9-face ((t (:foreground ,yellow))))
+ `(rainbow-delimiters-depth-10-face ((t (:foreground ,orange))))
+ `(rainbow-delimiters-depth-11-face ((t (:foreground ,green))))
+ `(rainbow-delimiters-depth-12-face ((t (:foreground ,blue))))
+
+ ;; TREESITTER
+ ;; Operators
+ `(tree-sitter-hl-face:operator ((t (:foreground ,green500))))
+
+ ;; Punctuation
+ `(tree-sitter-hl-face:punctuation.delimiter ((t (:foreground ,green500))))
+ `(tree-sitter-hl-face:punctuation.bracket   ((t (:foreground ,orange500))))
+ `(tree-sitter-hl-face:punctuation.special   ((t (:foreground ,orange500))))
+
+ ;; String
+ `(tree-sitter-hl-face:string        ((t (:foreground ,cyan500))))
+ `(tree-sitter-hl-face:string.regex  ((t (:foreground ,orange500))))
+ `(tree-sitter-hl-face:string.excape ((t (:foreground ,orange700))))
+
+ ;; Functions
+ `(tree-sitter-hl-face:constructor ((t (:foreground ,orange500))))
+ `(tree-sitter-hl-face:function   ((t (:foreground ,blue500))))
+ ;`(tree-sitter-hl-face:function.macro   ((t (:foreground ,red500))))
+ ;`(tree-sitter-hl-face:function.builtin ((t (:foreground ,orange500))))
+ `(tree-sitter-hl-face:function.call    ((t (:foreground ,blue500))))
+ `(tree-sitter-hl-face:method.call      ((t (:foreground ,blue500)))) 
+ `(tree-sitter-hl-face:type.parameter   ((t (:foreground ,orange500))))
+
+ ;; Keywords
+ `(tree-sitter-hl-face:keyword ((t (:foreground ,green500))))
+ `(tree-sitter-hl-face:label ((t (:foreground ,green500))))
+
+ ;; Type
+ `(tree-sitter-hl-face:type                ((t (:foreground ,yellow500))))
+ `(tree-sitter-hl-face:type.builtin        ((t (:foreground ,yellow500))))
+ `(tree-sitter-hl-face:property            ((t (:foreground ,blue500))))
+ `(tree-sitter-hl-face:property.definition ((t (:foreground ,blue500))))
+ `(tree-sitter-hl-face:attribute           ((t (:foreground ,blue500))))
+
+ ;;Identifiers
+ `(tree-sitter-hl-face:variable            ((t (:foreground ,base0))))
+ `(tree-sitter-hl-face:variable.builtin    ((t (:foreground ,orange500))))
+
+ ;;MODELINE 
+
+ `(mode-line ((t (:overline ,base01
+							:underline nil
+							:foreground ,base0
+							:background ,bg_highlight
+							:box (:line-width 1
+											  :color ,bg_highlight)))))
+
+ ))
+
+(provide-theme 'solarized-seriuusly)
+
+; (load-theme 'solarized-seriuusly t)
