@@ -330,6 +330,22 @@
   (eglot-ignore-server-capabilities
    '(:inlayHintProvider)))
 										;########
+										; LSPCE
+;; (rc/require 'yasnippet)
+;; (rc/require 'markdown-mode)
+;; (rc/require 'f)
+;; (use-package lspce
+;;   :load-path "~/.emacs.d/site-lisp/lspce/"
+;;   :config (progn
+;; 			(setq lspce-send-changes-idle-time 0.1)
+;; 			(setq lspce-show-log-level-in-modeline t)
+;; 			(lspce-set-log-file "/tmp/lspce.log")
+;; 			(setq lspce-server-programs `(
+;; 										  ("C", "clangd", "all-scopes-completion --clang-tidy --enable-config --header-insertion-decorators=0")
+;; 										  ))
+;; 			))
+
+										; ########
 (global-fancy-dabbrev-mode t)
 (global-set-key (kbd "<backtab>") 'fancy-dabbrev-expand)
 (global-org-modern-mode t)
