@@ -134,7 +134,7 @@
 ;;(rc/require 'naysayer-theme) 
 ;;(rc/require-theme 'dracula)
 ;;(load-theme 'naysayer t)
-;;(load-theme 'naysayer-custom t)
+(load-theme 'naysayer-custom t)
 ;;(set-cursor-color "#98fb98")
 ;;(rc/require 'nord-theme)
 ;;(load-theme 'naysayer t)
@@ -203,9 +203,10 @@
 (rc/require 'flycheck)
 (rc/require 'company)
 (rc/require 'posframe)
-(rc/require 'lsp-mode)
-(rc/require 'lsp-ui)
-(rc/require 'lsp-haskell)
+;; (rc/require 'lsp-mode)
+;; (rc/require 'lsp-ui)
+;; (rc/require 'lsp-haskell)
+(rc/require 'eglot)
 (rc/require 'fancy-dabbrev)
 (rc/require 'org-modern)
 (rc/require 'org-super-agenda)
@@ -297,41 +298,67 @@
 (setq git-commit-summary-max-length 100)
 
   										; Flycheck
+(rc/require 'flyover)
 (with-eval-after-load 'rust-mode
   (add-hook 'rust-mode-hook #'flycheck-rust-setup))
+(add-hook 'c-mode-hook #'flycheck-mode)
 										; Company
 (global-company-mode 1)
 										; LSP
-(set 'lsp-use-plists t)
-(use-package lsp-mode
-  :straight t
-  :init (add-to-list 'company-backends 'company-capf)
-  :config
-  (setq lsp-ui-doc-enable nil)
-  :commands lsp)
-(use-package lsp-ui :defer t)
+;; (set 'lsp-use-plists t)
+;; (use-package lsp-mode
+;;   :straight t
+;;   :init (add-to-list 'company-backends 'company-capf)
+;;   :config
+;;   (setq lsp-ui-doc-enable nil)
+;;   :commands lsp)
+;; (use-package lsp-ui :defer t)
 ;;HOOKS
-(add-hook 'rust-mode-hook #'lsp-deferred)
-(add-hook 'typescript-mode-hook #'lsp-deferred)
-(add-hook 'lua-mode-hook #'lsp-deferred)
-(add-hook 'c-mode-common-hook #'lsp-deferred)
-(add-hook 'gdscript-mode-hook #'lsp-deferred)
+;; (add-hook 'rust-mode-hook #'lsp-deferred)
+;; (add-hook 'typescript-mode-hook #'lsp-deferred)
+;; (add-hook 'lua-mode-hook #'lsp-deferred)
+;; (add-hook 'c-mode-common-hook #'lsp-deferred)
+;; (add-hook 'gdscript-mode-hook #'lsp-deferred)
 ;; CONFIG
-(global-set-key (kbd "C-<tab>") 'lsp-ui-doc-toggle)
-(global-set-key (kbd "C-<return>") 'lsp-ui-imenu)
-(setq lsp-ui-doc-position 'at-point)
-(setq lsp-ui-doc-show-with-cursor nil)
-(setq lsp-lens-enable t)
-(setq lsp-diagnostics-provider :flycheck)
-(setq lsp-ui-sideline-enable t)
-(setq lsp-ui-sideline-show-code-actions nil)
-(setq lsp-signature-render-documentation nil)
-(setq lsp-signature-function 'lsp-lv-message)
-(setq lsp-completion-provider :company-mode)
-(setq lsp-completion-show-detail t)
-(setq lsp-completion-show-kind t)
-(add-hook 'haskell-mode-hook #'lsp-deferred)
-(add-hook 'haskell-literate-mode-hook #'lsp-deferred)
+;; (global-set-key (kbd "C-<tab>") 'lsp-ui-doc-toggle)
+;; (global-set-key (kbd "C-<return>") 'lsp-ui-imenu)
+;; (setq lsp-ui-doc-position 'at-point)
+;; (setq lsp-ui-doc-show-with-cursor nil)
+;; (setq lsp-lens-enable t)
+;; (setq lsp-diagnostics-provider :flycheck)
+;; (setq lsp-ui-sideline-enable t)
+;; (setq lsp-ui-sideline-show-code-actions nil)
+;; (setq lsp-signature-render-documentation nil)
+;; (setq lsp-signature-function 'lsp-lv-message)
+;; (setq lsp-completion-provider :company-mode)
+;; (setq lsp-completion-show-detail t)
+;; (setq lsp-completion-show-kind t)
+;; (add-hook 'haskell-mode-hook #'lsp-deferred)
+;; (add-hook 'haskell-literate-mode-hook #'lsp-deferred)
+
+										; EGLOT
+(use-package eglot
+  :ensure t
+  :custom
+  (eglot-ignore-server-capabilities
+   '(:inlayHintProvider)))
+										;########
+										; LSPCE
+;; (rc/require 'yasnippet)
+;; (rc/require 'markdown-mode)
+;; (rc/require 'f)
+;; (use-package lspce
+;;   :load-path "~/.emacs.d/site-lisp/lspce/"
+;;   :config (progn
+;; 			(setq lspce-send-changes-idle-time 0.1)
+;; 			(setq lspce-show-log-level-in-modeline t)
+;; 			(lspce-set-log-file "/tmp/lspce.log")
+;; 			(setq lspce-server-programs `(
+;; 										  ("C", "clangd", "all-scopes-completion --clang-tidy --enable-config --header-insertion-decorators=0")
+;; 										  ))
+;; 			))
+
+										; ########
 (global-fancy-dabbrev-mode t)
 (global-set-key (kbd "<backtab>") 'fancy-dabbrev-expand)
 (global-org-modern-mode t)
@@ -554,8 +581,8 @@
   ;; other customizations can go here
 
   (setq c++-tab-always-indent t)
-  (setq c-basic-offset 4)                  ;; Default is 2
-  (setq c-indent-level 4)                  ;; Default is 2
+  (setq c-basic-offset 1)                  ;; Default is 2
+  (setq c-indent-level 1)                  ;; Default is 2
 
   (setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60))
   (setq tab-width 4)
