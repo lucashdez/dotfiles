@@ -42,7 +42,7 @@
 ;; SPECIAL REQUIRES
 (defvar rc/package-contents-refreshed nil)
 (defvar rc/system (if (eq system-type 'windows-nt)
-					  "~/../../drive/"
+					  "C:/Programs/dotfiles/emacs/"
 					"~/drive/"))
 
 (defun rc/package-refresh-contents-once ()
@@ -87,7 +87,7 @@
 ;; FRAME VARIABLES
 (setq inhibit-startup-screen t)
 (setq default-directory (if (eq system-type 'windows-nt)
-							"~/../../drive/"
+							"c:/projects/"
 						  "~/drive/"))
 (tool-bar-mode -1)
 (menu-bar-mode -1)
@@ -111,7 +111,7 @@
 
 ;; ######
 ;; CUSTOM THEME LOAD AND FILE LOAD
-(add-to-list 'custom-theme-load-path (concat rc/system "El-Arca/EmacsConfig/themes/"))
+(add-to-list 'custom-theme-load-path (concat rc/system "themes/"))
 ;;----
 
 ;;######
@@ -189,10 +189,10 @@
 (rc/require 'evil-easymotion)
 (rc/require 'evil-mc)
 (rc/require 'magit)
-(rc/require 'git-gutter+)
+(rc/require 'git-gutter)
 (rc/require 'helm)
-(rc/require 'helm-git-grep)
-(rc/require 'helm-ls-git)
+;(rc/require 'helm-git-grep)
+;(rc/require 'helm-ls-git)
 (rc/require 'flycheck-rust)
 (rc/require 'company)
 (rc/require 'posframe)
@@ -204,7 +204,7 @@
 (rc/require 'org-modern)
 (rc/require 'org-super-agenda)
 (rc/require 'mermaid-mode)
-(rc/require 'smartparens)
+;(rc/require 'smartparens)
 (rc/require 'vimish-fold)
 (rc/require 'evil-vimish-fold)
 										; Treesitter
@@ -280,7 +280,7 @@
 (global-set-key (kbd "C->") 'evil-mc-make-and-goto-next-match)
 (global-set-key (kbd "C-<") 'evil-mc-make-and-goto-prev-match)
 										; GIT GUTTER
-(add-hook 'prog-mode-hook 'git-gutter+-mode)
+(add-hook 'prog-mode-hook 'git-gutter-mode)
 (setq git-gutter+-added-sign "|")
 (setq git-gutter+-modified-sign "|")
 
