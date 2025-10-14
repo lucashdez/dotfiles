@@ -107,6 +107,7 @@
 (setq make-backup-files nil) ;; DO NOT BACKUP
 (set-frame-parameter nil 'alpha-background 90)
 (add-to-list 'default-frame-alist '(alpha-background . 90))
+(setq split-width-threshold 999999)
 ;;----
 
 ;; ######
@@ -126,8 +127,8 @@
 ;;(rc/require-theme 'gruber-darker)
 ;;(rc/require 'solarized-theme)
 ;;(load-theme 'solarized-dark-high-contrast t)
-;;(rc/require-theme 'catppuccin)
-;;(setq catppuccin-flavor 'mocha)
+(rc/require-theme 'catppuccin)
+(setq catppuccin-flavor 'mocha)
 ;;(rc/require 'modus-themes)
 ;;(load-theme 'modus-vivendi-deuteranopia 1)
 ;;(rc/require 'naysayer-theme) 
@@ -172,6 +173,13 @@
 		  (cons "emacs-lsp-booster" orig-result))
 	  orig-result)))
 (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
+
+(ignore-errors
+  (rc/require 'ansi-color)
+  (defun my-colorize-compilation-buffer ()
+	(when (eq major-mode 'compilation-mode)
+	  (ansi-color-apply-on-region compilation-filter-start (point-max))))
+  (add-hook 'compilation-filter-hook 'my-colorize-compilation-buffer))
 ;; ----
 
 ;;;;;;;;;;;;;;;;;
@@ -191,9 +199,8 @@
 (rc/require 'magit)
 (rc/require 'git-gutter)
 (rc/require 'helm)
-;(rc/require 'helm-git-grep)
-;(rc/require 'helm-ls-git)
 (rc/require 'flycheck-rust)
+(rc/require 'flycheck)
 (rc/require 'company)
 (rc/require 'posframe)
 ;; (rc/require 'lsp-mode)
@@ -279,10 +286,16 @@
 (global-set-key (kbd "C-S-c C-S-c") 'evil-mc-make-all-cursors)
 (global-set-key (kbd "C->") 'evil-mc-make-and-goto-next-match)
 (global-set-key (kbd "C-<") 'evil-mc-make-and-goto-prev-match)
+
+(evil-set-initial-state 'calc-mode 'emacs)
+(evil-set-initial-state 'dired-mode 'emacs)
+
 										; GIT GUTTER
 (add-hook 'prog-mode-hook 'git-gutter-mode)
-(setq git-gutter+-added-sign "|")
-(setq git-gutter+-modified-sign "|")
+(setq git-gutter-added-sign "|"
+	  git-gutter-modified-sign "|")
+(add-hook 'prog-mode-hook 'git-gutter-mode)
+(setq git-commit-summary-max-length 100)
 
   										; Flycheck
 (rc/require 'flyover)
@@ -364,6 +377,20 @@
   :ensure
   :after vimish-fold
   :hook ((prog-mode conf-mode text-mode) . evil-vimish-fold-mode))
+
+										; LSP SPECIFIC
+
+;; Lang hooks
+(add-hook 'csharp-mode-hook #'lsp-deferred)
+(add-hook 'c-mode-hook #'lsp-deferred)
+
+;; ANGULAR
+(rc/require 'tide)
+(rc/require 'ng2-mode)
+
+(add-hook 'typescript-mode-hook #'tide-setup)
+(add-hook 'typescript-mode-hook #'tide-mode)
+(add-hook 'typescript-mode-hook #'lsp-deferred)
 
 ;;;;;;;;;;
 ;; ---- ;;
@@ -524,21 +551,19 @@
   (setq wstr1 (replace-regexp-in-string "W" "" (replace-regexp-in-string ".org" "" (nth 1 wstr)))) ;  WXX
   (setq wstr2 (nth 0 wstr)) ; YYYY.org
   (setq days(get-days-in-week (string-to-number wstr2) (string-to-number wstr1)))
-  (setq block-title (concat wstr2 "-W" wstr1))
-  (setq outputstr (concat "#+TITLE: " block-title "\n" "* CLOCKTABLE\n"))
-  (setq outputstr (concat outputstr "#+BEGIN: clocktable :maxlevel 6 :scope agenda :block " block-title " :step day :stepskip0 (t) :fileskip0 :formater :link (t) :formula % :compact (t)\n#+END:\n"))
-  (setq outputstr (concat outputstr "* Insercion en Partes\n"))
+  (setq outputstr (concat "" "#+TITLE: REPORTES\n"))
   (setq outputstr
 		(concat outputstr
 				(let (value) (dolist (day days value)
 							   (setq value
 									 (concat value (concat "** " day "\n")
+											 (concat "#+BEGIN: clocktable :maxlevel 6 :scope agenda :block " day " :step day :stepskip0 (t) :fileskip0 :formater :link (t) :formula % :compact (t)\n#+END:\n\n")
 											 (concat "|-\n")
-											 (concat "|*P*|*TASK*|*FROM*|*TO*|*TOTAL*|*TOTALAQUA*|*ACCUM*|*ACCUM AQUA*|\n")
+											 (concat "|*ID*|*Work Item Type*|*Title*|*Comments*|*Status*|*Duration*|*Total*|\n")
 											 (concat "|-\n")
-											 (concat "|||||||||\n")
+											 (concat "||||||||\n")
 											 (concat "|-\n")
-											 (concat "#+TBLFM: $5=$4-$3;T::$6=$4-$3;t::$7=$5+vsum(@1$5..@-1$5);T::$8=$7;t\n\n"))))))))
+											 (concat "#+TBLFM: @2$7=vsum(@I$6..@>$6);T\n\n"))))))))
 
 (eval-after-load 'autoinsert
   '(define-auto-insert
@@ -574,8 +599,7 @@
   (defun org-agenda-files (&rest _)
 	(directory-files-recursively
 	 (if (eq system-type 'windows-nt)
-		 "C:/projects/"
+		 "C:/projects/EmacsInfo/"
 	   "~/projects/")
 	 org-agenda-file-regexp)
 	))
-
