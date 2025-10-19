@@ -1,10 +1,9 @@
-;;######
-;; PACKAGE MANAGEMENT
-(setenv "LSP_USE_PLISTS" "true")
-(require 'package)
-(add-to-list 'package-archives
-			 '("MELPA"
-			   . "http://melpa.org/packages/"))
+;;; config.el --- Summary  -*- lexical-binding: t -*-
+;;; package --- Summary:
+;;; Commentary:
+;;; Code:
+(setenv "LSP_USE_PLISTS" "true")		;Package management
+
 (defvar bootstrap-version)
 (let ((bootstrap-file
 	   (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -17,7 +16,23 @@
 	  (goto-char (point-max))
 	  (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
+;; Integrar straight.el con use-package
+(straight-use-package 'use-package)
+(setq straight-use-package-by-default t)
+(setq use-package-always-defer t)
+
 ;;----
+
+;; ============================
+;; utf-8 everywhere
+;; ============================
+(prefer-coding-system 'utf-8)
+(set-language-environment "UTF-8")
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(setq default-buffer-file-coding-system 'utf-8)
+
 
 ;;######
 ;; DISABLE MOUSE
@@ -48,7 +63,7 @@
 (defun rc/package-refresh-contents-once ()
   (when (not rc/package-contents-refreshed)
 	(setq rc/package-contents-refreshed t)
-	(package-refresh-contents)))
+	))
 (defun rc/require-one-package (package)
   (when (not (package-installed-p package))
 	(rc/package-refresh-contents-once)
@@ -93,7 +108,7 @@
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
 (fringe-mode -1)
-(display-line-numbers-mode t) 
+(display-line-numbers-mode t)
 (global-display-line-numbers-mode t) ;; NUMEROS DE LINEA
 (setq display-line-numbers-type 'relative)
 (setq completion-at-point-functions '(elisp-completion-at-point comint-dynamic-complete-filename t))
@@ -127,17 +142,18 @@
 ;;(rc/require-theme 'gruber-darker)
 ;;(rc/require 'solarized-theme)
 ;;(load-theme 'solarized-dark-high-contrast t)
-(rc/require-theme 'catppuccin)
-(setq catppuccin-flavor 'mocha)
+;;(rc/require-theme 'catppuccin)
+;;(setq catppuccin-flavor 'mocha)
 ;;(rc/require 'modus-themes)
 ;;(load-theme 'modus-vivendi-deuteranopia 1)
-;;(rc/require 'naysayer-theme) 
+;;(rc/require 'naysayer-theme)
 ;;(rc/require-theme 'dracula)
 ;;(load-theme 'naysayer t)
-(load-theme 'naysayer-custom t)
+;;(load-theme 'naysayer-custom t)
 ;;(set-cursor-color "#98fb98")
 ;;(rc/require 'nord-theme)
 ;;(load-theme 'naysayer t)
+(load-theme '4coder t)
 ;;----
 
 ;;######
@@ -199,14 +215,14 @@
 (rc/require 'magit)
 (rc/require 'git-gutter)
 (rc/require 'helm)
-(rc/require 'flycheck-rust)
+;(rc/require 'flycheck-rust)
 (rc/require 'flycheck)
 (rc/require 'company)
 (rc/require 'posframe)
-;; (rc/require 'lsp-mode)
+(rc/require 'lsp-mode)
 ;; (rc/require 'lsp-ui)
 ;; (rc/require 'lsp-haskell)
-(rc/require 'eglot)
+;;(rc/require 'eglot)
 (rc/require 'fancy-dabbrev)
 (rc/require 'org-modern)
 (rc/require 'org-super-agenda)
@@ -239,6 +255,13 @@
 
 										; Autothemer
 (use-package autothemer :ensure t :defer t)
+										; HELM
+(global-set-key (kbd "C-c h") 'helm-command-prefix)
+(global-unset-key (kbd "C-x C-f"))
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+(use-package helm
+  :ensure t
+  :init (helm-mode t))
 										; All the icons
 (use-package all-the-icons :ensure t :defer t)
 										; Doom modeline 
@@ -281,7 +304,11 @@
   (define-key evil-normal-state-map (kbd "C--") 'split-window-horizontally)
   (define-key evil-normal-state-map (kbd "C-.") 'split-window-vertically)
   )
-(evilem-default-keybindings "SPC")
+(use-package evil-easymotion
+  :after evil
+  :config
+  (evilem-default-keybindings "SPC")
+  )
 (global-evil-mc-mode 1)
 (global-set-key (kbd "C-S-c C-S-c") 'evil-mc-make-all-cursors)
 (global-set-key (kbd "C->") 'evil-mc-make-and-goto-next-match)
@@ -298,21 +325,62 @@
 (setq git-commit-summary-max-length 100)
 
   										; Flycheck
-(rc/require 'flyover)
+;; (straight-use-package
+;;  '(flyover :type git :host github :repo "konrad1977/flyover"
+;;            :files ("flyover.el" "flyover-pkg.el") ; solo estos archivos
+;;            :branch "main"))
+
+
+(with-eval-after-load 'flycheck-mode (require 'flyover))
+(add-hook 'flycheck-mode-hook #'flyover-mode)
+(use-package flyover
+  :after flycheck
+  :config
+  (setq flyover-virtual-line-icon "┈┈►")
+  (setq flyover-wrap-messages t)
+  (setq flyover-hide-checker-name t)
+  (setq flyover-show-at-eol t)
+  (setq flyover-show-virtual-line t)
+  )
 (with-eval-after-load 'rust-mode
   (add-hook 'rust-mode-hook #'flycheck-rust-setup))
 (add-hook 'c-mode-hook #'flycheck-mode)
-										; Company
-(global-company-mode 1)
-										; LSP
-;; (set 'lsp-use-plists t)
-;; (use-package lsp-mode
-;;   :straight t
-;;   :init (add-to-list 'company-backends 'company-capf)
+
+
+
+(use-package flycheck
+  :ensure t
+  :init
+  (require 'flyover)
+  (global-flycheck-mode t))
+
+;; (use-package flycheck-eglot
+;;   :ensure t
+;;   :after (flycheck eglot)
 ;;   :config
-;;   (setq lsp-ui-doc-enable nil)
-;;   :commands lsp)
-;; (use-package lsp-ui :defer t)
+;;   (global-flycheck-eglot-mode t))
+										; Company
+(rc/require 'corfu)
+(global-company-mode)
+;; (use-package corfu
+;;   :ensure t
+;;   :init
+;;   (global-corfu-mode)
+;;   :config
+;;   ;; Completado automático
+;;   (setq corfu-auto t)
+;;   (setq corfu-auto-delay 0.1)
+;;   (setq corfu-min-width 20)
+;;   (setq corfu-echo-documentation t))
+										; LSP
+(set 'lsp-use-plists t)
+(use-package lsp-mode
+  :straight t
+  :init (add-to-list 'company-backends 'company-capf)
+  :config
+  (setq lsp-ui-doc-enable nil)
+  :commands lsp)
+(use-package lsp-ui :defer t)
 ;;HOOKS
 ;; (add-hook 'rust-mode-hook #'lsp-deferred)
 ;; (add-hook 'typescript-mode-hook #'lsp-deferred)
@@ -320,45 +388,22 @@
 ;; (add-hook 'c-mode-common-hook #'lsp-deferred)
 ;; (add-hook 'gdscript-mode-hook #'lsp-deferred)
 ;; CONFIG
-;; (global-set-key (kbd "C-<tab>") 'lsp-ui-doc-toggle)
-;; (global-set-key (kbd "C-<return>") 'lsp-ui-imenu)
-;; (setq lsp-ui-doc-position 'at-point)
-;; (setq lsp-ui-doc-show-with-cursor nil)
-;; (setq lsp-lens-enable t)
-;; (setq lsp-diagnostics-provider :flycheck)
-;; (setq lsp-ui-sideline-enable t)
-;; (setq lsp-ui-sideline-show-code-actions nil)
-;; (setq lsp-signature-render-documentation nil)
-;; (setq lsp-signature-function 'lsp-lv-message)
-;; (setq lsp-completion-provider :company-mode)
-;; (setq lsp-completion-show-detail t)
-;; (setq lsp-completion-show-kind t)
+(global-set-key (kbd "C-<tab>") 'lsp-ui-doc-toggle)
+(global-set-key (kbd "C-<return>") 'lsp-ui-imenu)
+(setq lsp-ui-doc-position 'at-point)
+(setq lsp-ui-doc-show-with-cursor nil)
+(setq lsp-lens-enable t)
+(setq lsp-diagnostics-provider :flycheck)
+(setq lsp-ui-sideline-enable t)
+(setq lsp-ui-sideline-show-code-actions nil)
+(setq lsp-signature-render-documentation nil)
+(setq lsp-signature-function 'lsp-lv-message)
+(setq lsp-completion-provider :company-mode)
+(setq lsp-completion-show-detail t)
+(setq lsp-completion-show-kind t)
 ;; (add-hook 'haskell-mode-hook #'lsp-deferred)
 ;; (add-hook 'haskell-literate-mode-hook #'lsp-deferred)
 
-										; EGLOT
-(use-package eglot
-  :ensure t
-  :custom
-  (eglot-ignore-server-capabilities
-   '(:inlayHintProvider)))
-										;########
-										; LSPCE
-;; (rc/require 'yasnippet)
-;; (rc/require 'markdown-mode)
-;; (rc/require 'f)
-;; (use-package lspce
-;;   :load-path "~/.emacs.d/site-lisp/lspce/"
-;;   :config (progn
-;; 			(setq lspce-send-changes-idle-time 0.1)
-;; 			(setq lspce-show-log-level-in-modeline t)
-;; 			(lspce-set-log-file "/tmp/lspce.log")
-;; 			(setq lspce-server-programs `(
-;; 										  ("C", "clangd", "all-scopes-completion --clang-tidy --enable-config --header-insertion-decorators=0")
-;; 										  ))
-;; 			))
-
-										; ########
 (global-fancy-dabbrev-mode t)
 (global-set-key (kbd "<backtab>") 'fancy-dabbrev-expand)
 (global-org-modern-mode t)
@@ -381,16 +426,28 @@
 										; LSP SPECIFIC
 
 ;; Lang hooks
+;; Lang hooks
+
+(setq lsp-csharp-server-path "C:/Programs/omnisharp-roslyn/OmniSharp.exe")
+(setq lsp-csharp-server-args '("-lsp"))
+(add-hook 'csharp-ts-mode-hook #'lsp-deferred)
 (add-hook 'csharp-mode-hook #'lsp-deferred)
-(add-hook 'c-mode-hook #'lsp-deferred)
 
 ;; ANGULAR
 (rc/require 'tide)
 (rc/require 'ng2-mode)
 
+(setq-default typescript-indent-level 2)
 (add-hook 'typescript-mode-hook #'tide-setup)
 (add-hook 'typescript-mode-hook #'tide-mode)
-(add-hook 'typescript-mode-hook #'lsp-deferred)
+(flycheck-add-mode 'typescript-tslint 'ng2-ts-mode)
+
+(use-package tide
+  :config
+  (flycheck-add-mode 'typescript-tide 'ng2-ts-mode)
+  )
+
+;(add-hook 'typescript-mode-hook #'lsp-deferred)
 
 ;;;;;;;;;;
 ;; ---- ;;
@@ -603,3 +660,8 @@
 	   "~/projects/")
 	 org-agenda-file-regexp)
 	))
+
+(display-time-mode t)
+
+(provide 'config)
+;;; config.el ends here
