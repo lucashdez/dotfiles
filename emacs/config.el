@@ -58,7 +58,7 @@
 (defvar rc/package-contents-refreshed nil)
 (defvar rc/system (if (eq system-type 'windows-nt)
 					  "C:/Programs/dotfiles/emacs/"
-					"~/drive/"))
+					"~/dotfiles/emacs/"))
 
 (defun rc/package-refresh-contents-once ()
   (when (not rc/package-contents-refreshed)
@@ -213,7 +213,7 @@
 (rc/require 'evil-easymotion)
 (rc/require 'evil-mc)
 (rc/require 'magit)
-(rc/require 'git-gutter)
+(rc/require 'git-gutter+)
 (rc/require 'helm)
 ;(rc/require 'flycheck-rust)
 (rc/require 'flycheck)
@@ -318,10 +318,9 @@
 (evil-set-initial-state 'dired-mode 'emacs)
 
 										; GIT GUTTER
-(add-hook 'prog-mode-hook 'git-gutter-mode)
-(setq git-gutter-added-sign "|"
-	  git-gutter-modified-sign "|")
-(add-hook 'prog-mode-hook 'git-gutter-mode)
+(add-hook 'prog-mode-hook 'git-gutter+-mode)
+(setq git-gutter+-added-sign "|"
+	  git-gutter+-modified-sign "|")
 (setq git-commit-summary-max-length 100)
 
   										; Flycheck
@@ -360,7 +359,7 @@
 ;;   :config
 ;;   (global-flycheck-eglot-mode t))
 										; Company
-(rc/require 'corfu)
+;;(rc/require 'corfu)
 (global-company-mode)
 ;; (use-package corfu
 ;;   :ensure t
@@ -434,8 +433,8 @@
 (add-hook 'csharp-mode-hook #'lsp-deferred)
 
 ;; ANGULAR
-(rc/require 'tide)
-(rc/require 'ng2-mode)
+(use-package tide)
+(use-package ng2-mode)
 
 (setq-default typescript-indent-level 2)
 (add-hook 'typescript-mode-hook #'tide-setup)
