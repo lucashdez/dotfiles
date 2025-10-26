@@ -2,15 +2,15 @@
 #+begin_src emacs-lisp
   (defvar bootstrap-version)
   (let ((bootstrap-file
-  	   (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-  	  (bootstrap-version 6))
+         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+        (bootstrap-version 6))
     (unless (file-exists-p bootstrap-file)
-  	(with-current-buffer
-  		(url-retrieve-synchronously
-  		 "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-  		 'silent 'inhibit-cookies)
-  	  (goto-char (point-max))
-  	  (eval-print-last-sexp)))
+      (with-current-buffer
+  	(url-retrieve-synchronously
+  	 "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+  	 'silent 'inhibit-cookies)
+        (goto-char (point-max))
+        (eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage))
   ;; Integrar straight.el con use-package
   (straight-use-package 'use-package)
@@ -53,7 +53,7 @@
   (use-package org-superstar
     :init
     (org-superstar-mode 1)
-  (org-superstar-configure-like-org-bullets))
+    (org-superstar-configure-like-org-bullets))
 
   (use-package posframe)
   (use-package lsp-ui
