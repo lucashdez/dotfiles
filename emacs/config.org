@@ -41,7 +41,7 @@
 #+end_src
 
 * packages
-#+begin_src emacs-lisp
+
   (use-package doom-themes
     :init (load-theme 'doom-wilmersdorf t))
   (use-package consult)
@@ -49,11 +49,6 @@
     :init
     (global-company-mode 1)
     (add-to-list 'company-backends 'company-capf))
-
-  (use-package org-superstar
-    :init
-    (org-superstar-mode 1)
-    (org-superstar-configure-like-org-bullets))
 
   (use-package posframe)
   (use-package lsp-ui
@@ -67,4 +62,37 @@
   (use-package magit)
 
 #+end_src
+
+* Helm
+** Packages
+#+begin_src elisp
+  (use-package helm
+    :ensure t
+    :init (helm-mode t))
+#+end_src
+** Hooks
+
+* Org Mode
+** Packages
+
+#+begin_src elisp  
+  (use-package org-superstar
+    :ensure t
+    :after org)
+
+  (use-package org-super-agenda
+    :ensure t
+    :init (org-super-agenda-mode)
+    :bind (("C-c a" . org-agenda))
+    )
+#+End_src
+
+** Hook
+#+BEGIN_SRC elisp
+  (defun my-org-mode-hook ()
+    (org-superstar-mode)
+    (org-superstar-configure-like-org-bullets))
+
+  (add-hook 'org-mode-hook 'my-org-mode-hook)
+#+END_SRC
 
