@@ -34,6 +34,25 @@
 (add-to-list 'default-frame-alist '(alpha-background . 90))
 (setq split-width-threshold 999999)
 
+(use-package doom-themes
+  :init (load-theme 'doom-wilmersdorf t))
+(use-package consult)
+(use-package company
+  :init
+  (global-company-mode 1)
+  (add-to-list 'company-backends 'company-capf))
+
+(use-package posframe)
+(use-package lsp-ui
+  :defer t)
+(use-package lsp-mode
+  :init (add-to-list 'company-backends 'company-capf)
+  :config
+  (setq lsp-ui-doc-enable nil)
+  :commands lsp)
+
+(use-package magit)
+
 (use-package helm
   :ensure t
   :init (helm-mode t))
@@ -47,6 +66,7 @@
   :init (org-super-agenda-mode)
   :bind (("C-c a" . org-agenda))
   )
+(use-package org-modern)
 
 (defun my-org-mode-hook ()
   (org-superstar-mode)

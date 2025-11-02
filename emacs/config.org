@@ -38,10 +38,10 @@
   (set-frame-parameter nil 'alpha-background 92)
   (add-to-list 'default-frame-alist '(alpha-background . 90))
   (setq split-width-threshold 999999)
-#+end_src
+#+END_SRC
 
 * packages
-
+#+BEGIN_SRC elisp
   (use-package doom-themes
     :init (load-theme 'doom-wilmersdorf t))
   (use-package consult)
@@ -85,6 +85,7 @@
     :init (org-super-agenda-mode)
     :bind (("C-c a" . org-agenda))
     )
+  (use-package org-modern)
 #+End_src
 
 ** Hook
